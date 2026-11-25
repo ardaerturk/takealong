@@ -1,0 +1,1 @@
+Kitwake's original code uses the MIT license. The bundled OpenAI Codex distribution retains its own license and notice. Its nested dependencies, notices, license texts and source references remain in the original runtime layout. OpenAI, Claude Code and OpenCode are independent projects; Kitwake is not affiliated with their publishers.

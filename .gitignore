@@ -1,0 +1,8 @@
+/dist/
+/.cache/
+/kitwake
+/kitwake.exe
+.DS_Store
+__pycache__/
+.env
+.env.*

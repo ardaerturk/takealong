@@ -1,0 +1,15 @@
+{
+  "version": "0.172.0",
+  "targets": {
+    "linux": {
+      "archive": "codex-package-x86_64-unknown-linux-musl.tar.gz",
+      "sha256": "63e3b00065ed7f62166d0522e17f663cb866a31d80d03e63365482ed34a1d991",
+      "treeSha256": "70edc28e0e383d4afb0ffa69ef9f4a3a7edaf253d591e854251ba6d129e9975c"
+    },
+    "windows": {
+      "archive": "codex-package-x86_64-pc-windows-msvc.tar.gz",
+      "sha256": "b723674d7caf26a3f55121a02d6cad8f3ac8ddf5860747a6edde1c904cf593af",
+      "treeSha256": "106d3d3cc009d0a4c2870a08e8d09bc58d401aeb18934acd2936f639cce51148"
+    }
+  }
+}

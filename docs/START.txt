@@ -1,0 +1,17 @@
+Kitwake
+A coding agent you can carry.
+
+Linux: open this folder in a terminal and run ./kitwake
+Windows: double-click kitwake.exe
+
+Sign in when prompted. Use a computer you trust.
+To see every command, run ./kitwake --help (Windows: .\kitwake.exe --help).
+
+Open a project      kitwake open <folder>
+Brief a project     kitwake brief <folder>
+Continue a session  kitwake resume
+
+Add a Markdown file to recipes/ to make your own task.
+Keep the runtime folder next to the launcher. No install is required.
+
+Guide and source: https://github.com/ardaerturk/kitwake

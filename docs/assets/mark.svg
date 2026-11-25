@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">Kitwake</title>
+  <rect x="2" y="2" width="92" height="92" rx="23" fill="#123832"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 60h19l27-27" stroke="#b4f2d2" stroke-width="6"/>
+    <path d="M27 69h17l18-18" stroke="#74bd9a" stroke-width="4"/>
+    <path d="m43 36 19-12 10 10-12 19z" fill="#e2f8eb" stroke="#e2f8eb" stroke-width="3"/>
+    <path d="m60 32 4 4" stroke="#386b59" stroke-width="3"/>
+  </g>
+</svg>
