@@ -1,19 +1,19 @@
-Kitwake
+Takealong
 A coding agent you can carry.
 
-Linux: open this folder in a terminal and run ./kitwake
-Windows: double-click kitwake.exe
+Linux: open this folder in a terminal and run ./takealong
+Windows: double-click takealong.exe
 
 Sign in when prompted. Use a computer you trust.
-To see every command, run ./kitwake --help (Windows: .\kitwake.exe --help).
+To see every command, run ./takealong --help (Windows: .\takealong.exe --help).
 
-Open a project      kitwake open <folder>
-Brief a project     kitwake brief <folder>
-Continue a session  kitwake resume
+Open a project      takealong open <folder>
+Brief a project     takealong brief <folder>
+Continue a session  takealong resume
 
 Want the same first task each time? Write it in Start.md next to the
-launcher. Open Kitwake to start a new chat with that message.
+launcher. Open Takealong to start a new chat with that message.
 Add a Markdown file to recipes/ to keep other tasks you can run by name.
 Keep the runtime folder next to the launcher. No install is required.
 
-Guide and source: https://github.com/ardaerturk/kitwake
+Guide and source: https://github.com/ardaerturk/takealong

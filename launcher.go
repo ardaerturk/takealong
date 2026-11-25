@@ -46,7 +46,7 @@ func resolve(root string, o options) (engine, error) {
 	if o.agent == "codex" && !o.installed {
 		return engine{}, errors.New("Codex was not found. Extract the full USB kit, including its runtime folder, on x64 Linux or Windows")
 	}
-	return engine{}, fmt.Errorf("%s was not found on PATH. Open the bundled Codex with kitwake", o.agent)
+	return engine{}, fmt.Errorf("%s was not found on PATH. Open the bundled Codex with takealong", o.agent)
 }
 
 func project(root, explicit string) (string, error) {
@@ -66,7 +66,14 @@ func project(root, explicit string) (string, error) {
 			if e != nil {
 				return "", e
 			}
-			p = filepath.Join(home, "Kitwake Workspace")
+			p = filepath.Join(home, "Takealong Workspace")
+			// Keep existing users in their original workspace without moving any files.
+			if _, err := os.Lstat(p); errors.Is(err, os.ErrNotExist) {
+				legacy := filepath.Join(home, "Kitwake Workspace")
+				if info, err := os.Lstat(legacy); err == nil && info.IsDir() {
+					p = legacy
+				}
+			}
 			if e = os.MkdirAll(p, 0700); e != nil {
 				return "", e
 			}
@@ -139,14 +146,14 @@ func openingArgs(root, folder string, useStart bool) ([]string, error) {
 		return args, nil
 	}
 	if err != nil {
-		return nil, fmt.Errorf("Start.md: %w; use kitwake open for a blank session", err)
+		return nil, fmt.Errorf("Start.md: %w; use takealong open for a blank session", err)
 	}
 	return append(args, "--ask-for-approval", "never", "--", text), nil
 }
 
 func remoteArgs(host, id string) ([]string, error) {
 	if !hostName.MatchString(host) {
-		return nil, errors.New("use an SSH host alias, for example: kitwake remote studio")
+		return nil, errors.New("use an SSH host alias, for example: takealong remote studio")
 	}
 	line := "exec codex resume --all"
 	if id != "" {
@@ -196,7 +203,7 @@ func launch(root string, r request) error {
 		if e != nil {
 			return fmt.Errorf("could not start %s: %w", eng.path, e)
 		}
-		fmt.Printf("Kitwake  %s\nAgent    %s (%s)\nSystem   %s/%s\n", version, strings.TrimSpace(string(out)), eng.source, runtime.GOOS, runtime.GOARCH)
+		fmt.Printf("Takealong  %s\nAgent    %s (%s)\nSystem   %s/%s\n", version, strings.TrimSpace(string(out)), eng.source, runtime.GOOS, runtime.GOARCH)
 		return nil
 	}
 	if r.opts.agent != "codex" {

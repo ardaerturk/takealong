@@ -1,4 +1,4 @@
-// Kitwake opens a coding agent from a portable drive.
+// Takealong opens a coding agent from a portable drive.
 package main
 
 import (
@@ -11,26 +11,26 @@ import (
 	"strings"
 )
 
-const version = "0.2.0"
+const version = "0.3.0"
 
-const usage = `Kitwake · A coding agent you can carry.
+const usage = `Takealong · A coding agent you can carry.
 
-  kitwake                         Open Codex with Start.md if present
-  kitwake open [folder]           Open a blank Codex session
-  kitwake brief [folder]          Brief a folder without editing it
-  kitwake resume [session-id]     Continue a session on this computer
-  kitwake remote host [id]        Continue on a trusted SSH host
+  takealong                        Open Codex with Start.md if present
+  takealong open [folder]          Open a blank Codex session
+  takealong brief [folder]         Brief a folder without editing it
+  takealong resume [session-id]    Continue a session on this computer
+  takealong remote host [id]       Continue on a trusted SSH host
 
-  kitwake run name [folder]       Run a recipe from the drive
-  kitwake agents                  See which agents are available
-  kitwake login                   Sign in to Codex with a device code
-  kitwake doctor                  Check the selected runtime
+  takealong run name [folder]      Run a recipe from the drive
+  takealong agents                 See which agents are available
+  takealong login                  Sign in to Codex with a device code
+  takealong doctor                 Check the selected runtime
 
 Options (before the command):
   --installed        Use Codex from PATH instead of the drive
   --profile name     Use a Codex profile configured on this computer
   --agent name       Open codex, claude, or opencode
-  --version          Show the Kitwake version
+  --version          Show the Takealong version
   --help             Show this guide`
 
 type options struct {
@@ -71,7 +71,7 @@ func parse(args []string) (request, error) {
 			}
 			args = args[1:]
 		default:
-			return r, fmt.Errorf("unknown option %q; run kitwake --help", flag)
+			return r, fmt.Errorf("unknown option %q; run takealong --help", flag)
 		}
 	}
 	r.start = len(args) == 0 && r.opts.agent == "codex"
@@ -80,7 +80,7 @@ func parse(args []string) (request, error) {
 			r.verb = args[0]
 			args = args[1:]
 		} else if st, err := os.Stat(args[0]); err != nil || !st.IsDir() {
-			return r, fmt.Errorf("%q is not a command or an existing folder; run kitwake --help", args[0])
+			return r, fmt.Errorf("%q is not a command or an existing folder; run takealong --help", args[0])
 		}
 	}
 	r.args = args
@@ -88,7 +88,7 @@ func parse(args []string) (request, error) {
 		return r, fmt.Errorf("too many arguments for %s", r.verb)
 	}
 	if (r.verb == "run" || r.verb == "remote") && len(args) == 0 {
-		return r, fmt.Errorf("%s needs a name; run kitwake --help", r.verb)
+		return r, fmt.Errorf("%s needs a name; run takealong --help", r.verb)
 	}
 	if r.opts.agent != "codex" && r.opts.agent != "claude" && r.opts.agent != "opencode" {
 		return r, fmt.Errorf("unknown agent %q; choose codex, claude, or opencode", r.opts.agent)
@@ -115,7 +115,7 @@ func run(args []string) int {
 			fmt.Println(usage)
 			return 0
 		case "version":
-			fmt.Println("Kitwake " + version)
+			fmt.Println("Takealong " + version)
 			return 0
 		}
 		var self string
@@ -138,7 +138,7 @@ func run(args []string) int {
 		}
 		return 1
 	}
-	fmt.Fprintln(os.Stderr, "Kitwake:", err)
+	fmt.Fprintln(os.Stderr, "Takealong:", err)
 	return 1
 }
 

@@ -86,7 +86,7 @@ func TestProjectIsNeverTheDriveByAccident(t *testing.T) {
 		t.Fatal(e)
 	}
 	got, e := project(realRoot, "")
-	if e != nil || got != filepath.Join(home, "Kitwake Workspace") {
+	if e != nil || got != filepath.Join(home, "Takealong Workspace") {
 		t.Fatal(got, e)
 	}
 	folder := filepath.Join(root, "A project")
@@ -138,5 +138,34 @@ func TestStartNoteOnlyRunsOnAnImplicitOpen(t *testing.T) {
 	}
 	if _, err := argsFor("open"); err != nil {
 		t.Fatal("invalid note should not block explicit open", err)
+	}
+}
+
+func TestUpgradeReusesTheExistingWorkspace(t *testing.T) {
+	root := t.TempDir()
+	home := t.TempDir()
+	t.Setenv("HOME", home)
+	t.Setenv("USERPROFILE", home)
+	t.Chdir(root)
+	root, err := filepath.EvalSymlinks(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	old := filepath.Join(home, "Kitwake Workspace")
+	newer := filepath.Join(home, "Takealong Workspace")
+	if err := os.Mkdir(old, 0700); err != nil {
+		t.Fatal(err)
+	}
+	if got, err := project(root, ""); err != nil || got != old {
+		t.Fatalf("upgrade: %s, %v", got, err)
+	}
+	if _, err := os.Stat(newer); !os.IsNotExist(err) {
+		t.Fatal("unexpected second workspace", err)
+	}
+	if err := os.Mkdir(newer, 0700); err != nil {
+		t.Fatal(err)
+	}
+	if got, err := project(root, ""); err != nil || got != newer {
+		t.Fatalf("explicitly created newer workspace: %s, %v", got, err)
 	}
 }

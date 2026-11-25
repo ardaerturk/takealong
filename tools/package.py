@@ -15,7 +15,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 LOCK = json.loads((ROOT / "tools/runtimes.json").read_text())
 DIST = ROOT / "dist"
-KIT = DIST / "Kitwake"
+KIT = DIST / "Takealong"
 CACHE = ROOT / ".cache"
 
 
@@ -85,21 +85,21 @@ def package(targets, local, make_zip):
             unpack(download(spec), dest)
         if tree_sha(dest) != spec["treeSha256"]:
             raise ValueError(f"runtime contents do not match lock: {target}")
-        exe = "kitwake.exe" if target == "windows" else "kitwake"
+        exe = "takealong.exe" if target == "windows" else "takealong"
         env = {**os.environ, "CGO_ENABLED": "0", "GOOS": target, "GOARCH": "amd64"}
         subprocess.run(["go", "build", "-trimpath", "-buildvcs=false", "-ldflags=-s -w", "-o", KIT / exe, "."],
                        cwd=ROOT, env=env, check=True)
     shutil.copytree(ROOT / "recipes", KIT / "recipes")
     shutil.copytree(ROOT / "licenses", KIT / "licenses")
-    shutil.copy2(ROOT / "LICENSE", KIT / "licenses/Kitwake-MIT.txt")
+    shutil.copy2(ROOT / "LICENSE", KIT / "licenses/Takealong-MIT.txt")
     shutil.copy2(ROOT / "docs/START.txt", KIT / "Start here.txt")
     if make_zip:
-        dest = DIST / "kitwake-usb.zip"
+        dest = DIST / "takealong-usb.zip"
         with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED, compresslevel=3, allowZip64=True) as out:
             for p in sorted(KIT.rglob("*")):
                 if p.is_file():
                     # Preserve Linux executable bits even when the end user unpacks on a Mac.
-                    out.write(p, "Kitwake/" + p.relative_to(KIT).as_posix())
+                    out.write(p, "Takealong/" + p.relative_to(KIT).as_posix())
         digest = sha(dest)
         (DIST / "SHA256SUMS").write_text(f"{digest}  {dest.name}\n")
         print(f"{dest.name}: {dest.stat().st_size:,} bytes; SHA-256 {digest}")
@@ -109,6 +109,6 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--target", choices=["linux", "windows", "both"], default="both")
     ap.add_argument("--runtime-tree", type=Path, help="optional previously extracted, hash-verified runtime mirror")
-    ap.add_argument("--no-zip", action="store_true", help="only populate dist/Kitwake")
+    ap.add_argument("--no-zip", action="store_true", help="only populate dist/Takealong")
     opts = ap.parse_args()
     package(["linux", "windows"] if opts.target == "both" else [opts.target], opts.runtime_tree, not opts.no_zip)

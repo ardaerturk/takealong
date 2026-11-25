@@ -31,7 +31,7 @@ jobs:
       - run: go vet ./...
       - run: go test ./...
       - run: python tools/package.py --target ${{ matrix.target }} --no-zip
-      - run: python tools/smoke.py dist/Kitwake
+      - run: python tools/smoke.py "dist/Takealong"
 
   release:
     name: Publish USB kit
@@ -50,9 +50,9 @@ jobs:
           go-version: '1.27.4'
           cache: false
       - name: Check release version
-        run: test "v$(go run . --version | cut -d' ' -f2)" = "$GITHUB_REF_NAME"
+        run: test "$(go run . --version)" = "Takealong ${GITHUB_REF_NAME#v}"
       - run: python3 tools/package.py
       - name: Publish archive and checksum
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/kitwake-usb.zip dist/SHA256SUMS --verify-tag --title "Kitwake ${GITHUB_REF_NAME#v}" --notes-file docs/release.md
+        run: gh release create "$GITHUB_REF_NAME" dist/takealong-usb.zip dist/SHA256SUMS --verify-tag --title "Takealong ${GITHUB_REF_NAME#v}" --notes-file docs/release.md

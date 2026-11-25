@@ -10,7 +10,7 @@ import tempfile
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from threading import Thread
 
-MARK = "KITWAKE_SMOKE_OK"
+MARK = "TAKEALONG_SMOKE_OK"
 
 
 class Responses(BaseHTTPRequestHandler):
@@ -33,7 +33,7 @@ class Responses(BaseHTTPRequestHandler):
         msg = {"id": "msg_1", "type": "message", "status": "completed", "role": "assistant",
                "content": [{"type": "output_text", "text": MARK, "annotations": []}]}
         resp = {"id": "resp_1", "object": "response", "created_at": 1, "status": "completed",
-                "model": "kitwake-test", "output": [msg], "usage": {"input_tokens": 1, "output_tokens": 1, "total_tokens": 2}}
+                "model": "takealong-test", "output": [msg], "usage": {"input_tokens": 1, "output_tokens": 1, "total_tokens": 2}}
         events = [
             {"type": "response.created", "response": {**resp, "status": "in_progress", "output": []}},
             {"type": "response.output_item.added", "output_index": 0, "item": {**msg, "status": "in_progress", "content": []}},
@@ -50,7 +50,7 @@ class Responses(BaseHTTPRequestHandler):
 
 
 def smoke(root):
-    exe = root.resolve() / ("kitwake.exe" if os.name == "nt" else "kitwake")
+    exe = root.resolve() / ("takealong.exe" if os.name == "nt" else "takealong")
     with tempfile.TemporaryDirectory() as tmp, ThreadingHTTPServer(("127.0.0.1", 0), Responses) as srv:
         Thread(target=srv.serve_forever, daemon=True).start()
         try:
@@ -60,7 +60,7 @@ def smoke(root):
             project.mkdir()
             codex.mkdir(parents=True)
             (codex / "config.toml").write_text(
-                'model = "kitwake-test"\nmodel_provider = "localtest"\ncheck_for_update_on_startup = false\n'
+                'model = "takealong-test"\nmodel_provider = "localtest"\ncheck_for_update_on_startup = false\n'
                 '[model_providers.localtest]\nname = "Loopback"\nwire_api = "responses"\nrequires_openai_auth = false\n'
                 f'base_url = "http://127.0.0.1:{srv.server_port}/v1"\n')
             # Start with an allowlist; never pass a developer's provider credentials into this test.

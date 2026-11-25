@@ -1,7 +1,7 @@
 /dist/
 /.cache/
-/kitwake
-/kitwake.exe
+/takealong
+/takealong.exe
 .DS_Store
 __pycache__/
 .env
