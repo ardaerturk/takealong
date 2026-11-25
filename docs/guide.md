@@ -14,6 +14,12 @@ Pass a project explicitly, or start Kitwake from the project you want to use. If
 
 On Windows use `.\kitwake.exe` in PowerShell. Launching Kitwake from a source checkout without a bundled runtime uses a working Codex on PATH. A downloaded kit prefers its bundled Codex. To choose your existing CLI, put `--installed` before the command.
 
+## Choose the first task
+
+Put plain text in `Start.md`, next to `kitwake` and `kitwake.exe`. Keep it under 16 KiB. Open Kitwake normally to send that message in a new chat. It uses the same folder rules above: from the drive, the default is **Kitwake Workspace** in your home directory. Run the launcher from a project directory to use that project. A first task requests a read-only local sandbox with no approval escalation. Read the file before launching a kit someone else prepared.
+
+An explicit command takes precedence. Use `kitwake open` for a blank session, `kitwake run NAME` for a single answer, or `kitwake resume` to return to existing work. To use the first task with a provider profile already on the host, run `kitwake --profile work`. Remove `Start.md` to return to a blank chat by default.
+
 ## Accounts and providers
 
 A new trusted machine needs its own authorization. Run `./kitwake login` to use Codex's device-code flow if your account allows it. Otherwise use normal interactive sign-in. Removing the USB doesn't sign you out.

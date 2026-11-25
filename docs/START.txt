@@ -11,7 +11,9 @@ Open a project      kitwake open <folder>
 Brief a project     kitwake brief <folder>
 Continue a session  kitwake resume
 
-Add a Markdown file to recipes/ to make your own task.
+Want the same first task each time? Write it in Start.md next to the
+launcher. Open Kitwake to start a new chat with that message.
+Add a Markdown file to recipes/ to keep other tasks you can run by name.
 Keep the runtime folder next to the launcher. No install is required.
 
 Guide and source: https://github.com/ardaerturk/kitwake

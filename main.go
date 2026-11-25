@@ -11,11 +11,12 @@ import (
 	"strings"
 )
 
-const version = "0.1.0"
+const version = "0.2.0"
 
 const usage = `Kitwake · A coding agent you can carry.
 
-  kitwake [folder]                Open Codex
+  kitwake                         Open Codex with Start.md if present
+  kitwake open [folder]           Open a blank Codex session
   kitwake brief [folder]          Brief a folder without editing it
   kitwake resume [session-id]     Continue a session on this computer
   kitwake remote host [id]        Continue on a trusted SSH host
@@ -37,9 +38,10 @@ type options struct {
 	profile, agent string
 }
 type request struct {
-	opts options
-	verb string
-	args []string
+	opts  options
+	verb  string
+	args  []string
+	start bool
 }
 
 var commands = map[string]int{"open": 1, "brief": 1, "run": 2, "resume": 1, "remote": 2, "agents": 0, "doctor": 0, "login": 0, "help": 0, "version": 0}
@@ -72,6 +74,7 @@ func parse(args []string) (request, error) {
 			return r, fmt.Errorf("unknown option %q; run kitwake --help", flag)
 		}
 	}
+	r.start = len(args) == 0 && r.opts.agent == "codex"
 	if len(args) > 0 {
 		if _, ok := commands[args[0]]; ok {
 			r.verb = args[0]

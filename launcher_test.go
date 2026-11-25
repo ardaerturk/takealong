@@ -98,3 +98,45 @@ func TestProjectIsNeverTheDriveByAccident(t *testing.T) {
 		t.Fatal(got, e)
 	}
 }
+
+func TestStartNoteOnlyRunsOnAnImplicitOpen(t *testing.T) {
+	root, folder := t.TempDir(), t.TempDir()
+	file := filepath.Join(root, "Start.md")
+	argsFor := func(argv ...string) ([]string, error) {
+		t.Helper()
+		r, err := parse(argv)
+		if err != nil {
+			return nil, err
+		}
+		return openingArgs(root, folder, r.start)
+	}
+	blank, err := argsFor()
+	if err != nil || strings.Join(blank, " ") != "--cd "+folder+" --sandbox read-only" {
+		t.Fatal(blank, err)
+	}
+	note := "--version\nTell me what changed. Use only local files."
+	if err := os.WriteFile(file, []byte(note), 0600); err != nil {
+		t.Fatal(err)
+	}
+	for _, argv := range [][]string{nil, {"--profile", "work"}} {
+		args, err := argsFor(argv...)
+		if err != nil || len(args) != 8 || args[1] != folder || args[3] != "read-only" || args[4] != "--ask-for-approval" || args[5] != "never" || args[6] != "--" || args[7] != note {
+			t.Fatal(args, err)
+		}
+	}
+	for _, argv := range [][]string{{"open"}, {"open", folder}, {folder}, {"--agent", "claude"}} {
+		args, err := argsFor(argv...)
+		if err != nil || strings.Join(args, " ") != strings.Join(blank, " ") {
+			t.Fatal(argv, args, err)
+		}
+	}
+	if err := os.WriteFile(file, []byte("  "), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := argsFor(); err == nil {
+		t.Fatal("ignored invalid Start.md")
+	}
+	if _, err := argsFor("open"); err != nil {
+		t.Fatal("invalid note should not block explicit open", err)
+	}
+}

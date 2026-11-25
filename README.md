@@ -25,7 +25,9 @@ On Windows, use `.\kitwake.exe` and a Windows folder path. To continue on a diff
 
 ## Make it yours
 
-Add a plain text file called `recipes/review.md` to the kit:
+**Start with the same task.** Put a file named `Start.md` next to the launcher. Write what you want Codex to do, such as “Tell me what changed in this folder and what to read first.” The next time you open Kitwake, it starts a fresh chat with that message and leaves the terminal open for follow-up questions. Run `./kitwake open` to skip it.
+
+**Keep several tasks.** Add a plain text file called `recipes/review.md` to the kit:
 
 ```text
 Review the changes in this folder. Name the most important risk
@@ -36,4 +38,4 @@ Run `./kitwake run review ~/projects/notes`. A recipe becomes a Codex prompt, ne
 
 **Supported:** bundled Codex for x64 Linux and Windows. Existing Codex, Claude Code, and OpenCode can also be opened explicitly. macOS and ARM do not have bundled runtimes in this release.
 
-[User guide](docs/guide.md) · [Build and contribute](CONTRIBUTING.md) · [Security](SECURITY.md) · [MIT license](LICENSE)
+[User guide](docs/guide.md) · [Build and contribute](CONTRIBUTING.md) · [Related projects](docs/related.md) · [Security](SECURITY.md) · [MIT license](LICENSE)

@@ -94,15 +94,23 @@ func recipe(root, name string) (string, error) {
 		return "", errors.New("recipes must be a real directory")
 	}
 	p := filepath.Join(dir, name+".md")
-	st, e := os.Lstat(p)
+	text, e := readPrompt(p)
 	if errors.Is(e, os.ErrNotExist) && name == "brief" {
 		return strings.TrimSpace(defaultBrief), nil
 	}
-	if e != nil {
+	if errors.Is(e, os.ErrNotExist) {
 		return "", fmt.Errorf("recipe %q not found; add recipes/%s.md to the drive", name, name)
 	}
+	return text, e
+}
+
+func readPrompt(p string) (string, error) {
+	st, e := os.Lstat(p)
+	if e != nil {
+		return "", e
+	}
 	if !st.Mode().IsRegular() || st.Size() > 16384 {
-		return "", errors.New("a recipe must be a regular text file of at most 16 KiB")
+		return "", errors.New("use a regular text file of at most 16 KiB")
 	}
 	f, e := os.Open(p)
 	if e != nil {
@@ -115,9 +123,25 @@ func recipe(root, name string) (string, error) {
 	}
 	s := strings.TrimSpace(string(b))
 	if s == "" || len(b) > 16384 || !utf8.Valid(b) || strings.ContainsRune(s, 0) {
-		return "", errors.New("recipe must contain plain UTF-8 text of at most 16 KiB")
+		return "", errors.New("enter plain UTF-8 text of at most 16 KiB")
 	}
 	return s, nil
+}
+
+// Start.md may provide a first message. It cannot select an executable, folder or provider.
+func openingArgs(root, folder string, useStart bool) ([]string, error) {
+	args := []string{"--cd", folder, "--sandbox", "read-only"}
+	if !useStart {
+		return args, nil
+	}
+	text, err := readPrompt(filepath.Join(root, "Start.md"))
+	if errors.Is(err, os.ErrNotExist) {
+		return args, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("Start.md: %w; use kitwake open for a blank session", err)
+	}
+	return append(args, "--ask-for-approval", "never", "--", text), nil
 }
 
 func remoteArgs(host, id string) ([]string, error) {
@@ -207,7 +231,11 @@ func launch(root string, r request) error {
 		if e != nil {
 			return e
 		}
-		a = append(a, "--cd", p, "--sandbox", "read-only")
+		opening, err := openingArgs(root, p, r.start)
+		if err != nil {
+			return err
+		}
+		a = append(a, opening...)
 	case "brief", "run":
 		name, i := "brief", 0
 		if r.verb == "run" {
